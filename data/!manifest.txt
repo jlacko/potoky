@@ -1,0 +1,13 @@
+## Manifest dat:
+
+* terenniRelief - Mapový podklad – Data50, 2021 © Český úřad zeměměřický a katastrální, www.cuzk.cz. 
+zdroj = https://geoportal.cuzk.cz/ZAKAZKY/Data50/terenniRelief.zip
+
+* vodstvo - Mapový podklad – Data50, 2021 © Český úřad zeměměřický a katastrální, www.cuzk.cz. 
+zdroj = https://geoportal.cuzk.cz/ZAKAZKY/Data50/vodstvo.zip
+
+* dibavod - podklad Dibavod, vodní tok (jemné úseky)
+zdroj = https://www.dibavod.cz/index.php?id=27
+
+* KVES_Zlinsky.* - podklad AOPK, Konsolidovaná vrstva ekosystémů 2022 (KVES)
+zdroj = https://data.nature.cz/ds/102/download-list?

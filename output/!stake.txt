@@ -1,0 +1,1 @@
+toto je zaražený kolík; jeho jediný cíl je říct gitu že adresář /output má existovat
