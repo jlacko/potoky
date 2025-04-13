@@ -53,8 +53,8 @@ maly %>%
   mutate(plocha = units::drop_units(st_area(.))) %>% 
   st_drop_geometry() %>%  # už jí nepotřebuju...
   group_by(from, to, name, kategorie) %>% 
-  summarise(plocha = sum(plocha)) %>% 
+  summarise(plocha = sum(plocha), .groups = "drop") %>% 
   tidyr::pivot_wider(values_from = plocha,
                      names_from = kategorie,
                      values_fill = 0) %>% 
-  write.csv2("./output/3potoky.csv")
+  write.csv2("./output/3potoky.csv", row.names = F)
