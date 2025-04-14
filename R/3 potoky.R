@@ -35,11 +35,26 @@ useky_zajmu <- voda_zajmu %>%
   activate("edges") %>% 
   st_as_sf()
 
+# vytahnout názvy edge nodes
+hranice <- voda_zajmu %>% 
+  as_sfnetwork() %>% 
+  st_network_blend(excel) %>% 
+  activate("nodes") %>% 
+  st_as_sf()
+
+# pojmenovat edge nodes názvem, ne číslem
+useky_zajmu$from_point <- hranice$point[useky_zajmu$from]
+useky_zajmu$to_point <- hranice$point[useky_zajmu$to]
+
 # buffery přeložené do KVESu
-maly <- st_buffer(useky_zajmu, 100, endCapStyle = "FLAT", joinStyle = "MITRE") %>% 
+maly <- st_buffer(useky_zajmu, 100, endCapStyle = "FLAT", joinStyle = "MITRE") 
+
+maly_kves <- maly %>% 
   st_intersection(kves)
 
-velky <- st_buffer(useky_zajmu, 150, endCapStyle = "FLAT", joinStyle = "MITRE") %>% 
+velky <- st_buffer(useky_zajmu, 150, endCapStyle = "FLAT", joinStyle = "MITRE") 
+
+velky_kves <- velky %>% 
   st_intersection(kves)
 
 # odlít stranou pro vizuální kontrolu
@@ -47,12 +62,14 @@ st_write(excel, "./data/3potoky.gpkg", layer = "points", append = F)
 st_write(useky_zajmu, "./data/3potoky.gpkg", layer = "sections", append = F)
 st_write(maly, "./data/3potoky.gpkg", layer = "small_buffer", append = F)
 st_write(velky, "./data/3potoky.gpkg", layer = "large_buffer", append = F)
+st_write(maly_kves, "./data/3potoky.gpkg", layer = "small_kves", append = F)
+st_write(velky_kves, "./data/3potoky.gpkg", layer = "large_kves", append = F)
 
 # výstup
-maly %>% 
+maly_kves %>% 
   mutate(plocha = units::drop_units(st_area(.))) %>% 
   st_drop_geometry() %>%  # už jí nepotřebuju...
-  group_by(from, to, name, kategorie) %>% 
+  group_by(from, to, from_point, to_point, name, kategorie) %>% 
   summarise(plocha = sum(plocha), .groups = "drop") %>% 
   tidyr::pivot_wider(values_from = plocha,
                      names_from = kategorie,
