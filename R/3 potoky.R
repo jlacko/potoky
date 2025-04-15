@@ -33,7 +33,8 @@ useky_zajmu <- voda_zajmu %>%
   as_sfnetwork() %>% 
   st_network_blend(excel) %>% 
   activate("edges") %>% 
-  st_as_sf()
+  st_as_sf()%>% 
+  mutate(section_length = round(st_length(.)))
 
 # vytahnout názvy edge nodes
 hranice <- voda_zajmu %>% 
@@ -69,7 +70,7 @@ st_write(velky_kves, "./data/3potoky.gpkg", layer = "large_kves", append = F)
 maly_kves %>% 
   mutate(plocha = units::drop_units(st_area(.))) %>% 
   st_drop_geometry() %>%  # už jí nepotřebuju...
-  group_by(from, to, from_point, to_point, name, kategorie) %>% 
+  group_by(from, to, from_point, to_point, section_length, name, kategorie) %>% 
   summarise(plocha = sum(plocha), .groups = "drop") %>% 
   tidyr::pivot_wider(values_from = plocha,
                      names_from = kategorie,
